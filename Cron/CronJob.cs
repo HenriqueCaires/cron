@@ -25,7 +25,7 @@ namespace Cron
             _cron_schedule = new CronSchedule(schedule);
             _action = action;
             _cancellationTokenSource = new CancellationTokenSource();
-            _task = new Task(action, _cancellationTokenSource.Token);
+            _task = new Task(action, _cancellationTokenSource.Token, TaskCreationOptions.LongRunning);
 
         }
         
@@ -35,7 +35,7 @@ namespace Cron
             {
                 if (_cron_schedule.IsTime(dateTime) && _task.Status != TaskStatus.Running)
                 {
-                    _task = new Task(_action, _cancellationTokenSource.Token);
+                    _task = new Task(_action, _cancellationTokenSource.Token, TaskCreationOptions.LongRunning);
                     _task.Start();
                 }
             }
