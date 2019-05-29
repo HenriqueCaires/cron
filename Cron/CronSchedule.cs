@@ -71,6 +71,28 @@ namespace Cron
                    DaysOfWeek.Contains((int)date_time.DayOfWeek);
         }
 
+        public DateTime NextRun(DateTime? fromDate = null)
+        {
+            var date = fromDate ?? DateTime.Now;
+            date = date.AddSeconds(60 - date.Second);
+            while (!IsTime(date))
+            {
+                date = date.AddMinutes(1);
+            }
+            return date;
+        }
+
+        public DateTime LastRun(DateTime? fromDate = null)
+        {
+            var date = fromDate ?? DateTime.Now;
+            date = date.AddSeconds(-date.Second);
+            while (!IsTime(date))
+            {
+                date = date.AddMinutes(-1);
+            }
+            return date;
+        }
+
         private void Generate()
         {
             if (!IsValid()) return;
